@@ -1,13 +1,13 @@
 package com.example.dev2.faceforapplication.otherActivity;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.example.dev2.faceforapplication.MainActivity;
@@ -37,7 +37,7 @@ public class CallActivity extends FragmentActivity  implements
         setContentView(R.layout.activity_call);
 
 
-        manager = getFragmentManager();
+        manager = getSupportFragmentManager();
         endCallFragment = new EndCallFragment().newInstance();
         iconFragment = new IconFragment().newInstance();
 

@@ -87,8 +87,8 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         mSipProfile.setLocalPort(5060);
         mSipProfile.setRemoteIp("192.168.88.100");
         mSipProfile.setRemotePort(5060);
-        mSipProfile.setSipUserName("3001");
-        mSipProfile.setSipPassword("3001");
+        mSipProfile.setSipUserName("3005");
+        mSipProfile.setSipPassword("3005");
         mSipProfile.setTransport("UDP");
         mSipProfile.setLocalIp(SipManager.getIPAddress(true));
 
@@ -202,8 +202,11 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return fragmentList.get(position);
+            // Return a PlaceholderFragment (defined as a static inner class below).);
+            if (position >= 0 && position < fragmentList.size()) {
+                return fragmentList.get(position);
+            }else
+            return new Fragment();
         }
 
         @Override

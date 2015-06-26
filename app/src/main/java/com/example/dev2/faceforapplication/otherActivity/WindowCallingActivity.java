@@ -1,10 +1,11 @@
 package com.example.dev2.faceforapplication.otherActivity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -37,7 +38,7 @@ public class WindowCallingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_window_calling);
 
-        manager = getFragmentManager();
+        manager = getSupportFragmentManager();
         iconFragment = new IconFragment().newInstance();
         callButtonsFragment = new CallButtonsFragment().newInstance();
         endCallFragment = new EndCallFragment().newInstance();
@@ -45,7 +46,7 @@ public class WindowCallingActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             transaction = manager.beginTransaction();
             transaction.add(R.id.ll_body_window_calling, iconFragment, IconFragment.TAG);
-//            transaction.add(R.id.ll_call_up, callButtonsFragment, CallButtonsFragment.TAG);
+            transaction.add(R.id.ll_call_up, callButtonsFragment, CallButtonsFragment.TAG);
             transaction.add(R.id.ll_call_cancel, endCallFragment, EndCallFragment.TAG);
             transaction.commit();
         }
