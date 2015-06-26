@@ -90,9 +90,9 @@ public class StartPageFragment extends Fragment {
         viewStartPageFragment = View.inflate(getActivity(), R.layout.fragment_start_page, null);
 
         manager = getFragmentManager();
-        buttonsFragment = new ButtonsFragment().newInstance();
-        callButtonsFragment = new CallButtonsFragment().newInstance();
-        inputPlaceFragment = new InputPlaceFragment().newInstance();
+        buttonsFragment = new ButtonsFragment();
+        callButtonsFragment = new CallButtonsFragment();
+        inputPlaceFragment = new InputPlaceFragment();
 
         if (savedInstanceState == null) {
             transaction = manager.beginTransaction();

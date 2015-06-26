@@ -1,6 +1,7 @@
 package com.example.dev2.faceforapplication.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,11 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.dev2.faceforapplication.R;
+import com.example.dev2.faceforapplication.otherActivity.CallActivity;
+
+import sipua.SipProfile;
+import sipua.impl.DeviceImpl;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -112,7 +118,8 @@ public class HistoryFragment extends Fragment {
         setRetainInstance(true);
         historyFragment = View.inflate(getActivity(), R.layout.fragment_history, null);
         listHistory = (ListView) historyFragment.findViewById(R.id.list_history);
-        listHistory.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        listHistory.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
+        listHistory.setOnItemClickListener(listener);
         adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
         listHistory.setAdapter(adapter);
 
@@ -166,6 +173,28 @@ public class HistoryFragment extends Fragment {
          */
 // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
+            makeCall();
+            Intent intent = new Intent(getActivity(), CallActivity.class);
+            getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+            startActivity(intent);
+            InputPlaceFragment.setTextInToTextView("");
+        }
+    };
+
+    private void makeCall() {
+        String mCallAddress = InputPlaceFragment.getTextFromTextView();
+        SipProfile mSipProfile = new SipProfile();
+        //globalData.setOutCallNumber(mCallAddress);
+        DeviceImpl.GetInstance().Call(
+                "sip:" + mCallAddress +
+                        "@" + mSipProfile.getRemoteIp() +
+                        ":" + mSipProfile.getRemotePort());
     }
 
 }
