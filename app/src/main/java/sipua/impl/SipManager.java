@@ -35,8 +35,10 @@ import android.javax.sip.address.Address;
 import android.javax.sip.address.AddressFactory;
 import android.javax.sip.header.CSeqHeader;
 import android.javax.sip.header.CallIdHeader;
+import android.javax.sip.header.ContactHeader;
 import android.javax.sip.header.Header;
 import android.javax.sip.header.HeaderFactory;
+import android.javax.sip.header.ToHeader;
 import android.javax.sip.header.ViaHeader;
 import android.javax.sip.message.MessageFactory;
 import android.javax.sip.message.Request;
@@ -57,6 +59,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Timer;
 
 import sipua.ISipEventListener;
 import sipua.ISipManager;
@@ -146,7 +149,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                 sipProfile.getRemoteEndpoint() + "/"
                         + sipProfile.getTransport());
         properties.setProperty("android.javax.sip.STACK_NAME", "androidSip");
-        properties.setProperty("android.javax.sip.AUTOMATIC_DIALOG_SUPPORT", "on");
+        //properties.setProperty("android.javax.sip.AUTOMATIC_DIALOG_SUPPORT", "on");
 
         try {
             if (udpListeningPoint != null) {
@@ -181,110 +184,18 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         return true;
     }
 
-    @Override
-    public void processRequest(RequestEvent arg0) {
-
-        requestEvent = arg0;
-        Request request = arg0.getRequest();
-        ServerTransaction serverTransactionId = arg0.getServerTransaction();
-        //currentCallTransaction = serverTransactionId;
-        SIPMessage sp = (SIPMessage) request;
-        System.out.println(request.getMethod());
-
-       /* if (request.getMethod().equals("BYE")) {
-            sendOk(arg0);
-        }*/
-
-        if (request.getMethod().equals("MESSAGE")) {
-            sendOk(arg0);
-
-            try {
-                String message = sp.getMessageContent();
-                dispatchSipEvent(new SipEvent(this, SipEventType.MESSAGE,
-                        message, sp.getFrom().getAddress().toString()));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        } else if (request.getMethod().equals(Request.BYE)) {
-            sipManagerState = SipManagerState.IDLE;
-            processBye(request, serverTransactionId);
-            dispatchSipEvent(new SipEvent(this, SipEventType.BYE, "", sp
-                    .getFrom().getAddress().toString()));
-
-        }
-        if (request.getMethod().equals(Request.INVITE)) {
-            processInvite(arg0, serverTransactionId);
-            Intent intent = new Intent(mContext, WindowCallingActivity.class);
-            mContext.startActivity(intent);
-
-                serverTransaction = arg0.getServerTransaction();
-                sendOk(arg0);
-                //sendAck(request);
-           
-        }
-
-        /*if (request.getMethod().equals(Request.ACK)) {
-            Intent intent = new Intent(mContext, WindowCallingActivity.class);
-            mContext.startActivity(intent);
-            sendOk(arg0);
-        }*/
-    }
-
-
-
-
-    public void sendOk(RequestEvent requestEvt) {
-        Response response;
-        try {
-            response = messageFactory.createResponse(200,
-                    requestEvt.getRequest());
-            ServerTransaction serverTransaction = requestEvt
-                    .getServerTransaction();
-            if (serverTransaction == null) {
-                serverTransaction = sipProvider
-                        .getNewServerTransaction(requestEvt.getRequest());
-            }
-            serverTransaction.sendResponse(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void processIOException(IOExceptionEvent exceptionEvent) {
-        System.out.println("IOException happened for "
-                + exceptionEvent.getHost() + " port = "
-                + exceptionEvent.getPort());
-
-    }
-
-    public void processTransactionTerminated(
-            TransactionTerminatedEvent transactionTerminatedEvent) {
-        System.out.println("Transaction terminated event recieved");
-    }
-
-    public void processDialogTerminated(
-            DialogTerminatedEvent dialogTerminatedEvent) {
-        System.out.println("dialogTerminatedEvent");
-
-    }
-
-    public void processTimeout(TimeoutEvent timeoutEvent) {
-
-        System.out.println("Transaction Time out");
-    }
 
     @Override
     public void processResponse(ResponseEvent arg0) {
 
         Response response = arg0.getResponse();
         System.out.println(response.getStatusCode());
+        dialog = arg0.getDialog();
         arg0.getDialog();
+        int string = response.getStatusCode();
 
         //trying to get TAG FROM TO HEADER
         Header d = response.getHeader("To");
-
         String s = d.toString();
         mTagCall = s.split("(;)");
         //s.split("\\=");
@@ -381,8 +292,204 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             System.out.println("BUSY");
             dispatchSipEvent(new SipEvent(this,
                     SipEventType.SERVICE_UNAVAILABLE, "", ""));
+        } else if (response.getStatusCode() == Response.SESSION_PROGRESS) {
+            System.out.println("SessionInProgress");
+            ClientTransaction clientTransaction = null;
+            Request okRequets = null;
+
+            try {
+                okRequets = dialog.createRequest(Request.ACK);
+                clientTransaction = sipProvider.getNewClientTransaction(okRequets);
+                dialog.sendRequest(clientTransaction);
+            } catch (SipException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    @Override
+    public void processRequest(RequestEvent arg0) {
+
+        requestEvent = arg0;
+        String s = arg0.getRequest().getMethod().toString();
+        Request request = arg0.getRequest();
+        ServerTransaction serverTransactionId = arg0.getServerTransaction();
+        //currentCallTransaction = serverTransactionId;
+        SIPMessage sp = (SIPMessage) request;
+        System.out.println(request.getMethod());
+
+       /* if (request.getMethod().equals("BYE")) {
+            sendOk(arg0);
+        }*/
+
+        if (request.getMethod().equals("MESSAGE")) {
+            sendOk(arg0);
+
+            try {
+                String message = sp.getMessageContent();
+                dispatchSipEvent(new SipEvent(this, SipEventType.MESSAGE,
+                        message, sp.getFrom().getAddress().toString()));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        } else if (request.getMethod().equals(Request.BYE)) {
+            sipManagerState = SipManagerState.IDLE;
+            processBye(request, serverTransactionId);
+            dispatchSipEvent(new SipEvent(this, SipEventType.BYE, "", sp
+                    .getFrom().getAddress().toString()));
+
+        }
+        if (request.getMethod().equals(Request.INVITE)) {
+
+            processInvite(arg0, serverTransactionId);
+            //sendOk(arg0);
+            //incomingInvite(arg0, arg0.getServerTransaction());
+
+            Intent intent = new Intent(mContext, WindowCallingActivity.class);
+            mContext.startActivity(intent);
+            serverTransaction = arg0.getServerTransaction();
+
+
+        }
+
+
+        if (request.getMethod().equals(Request.ACK)) {
+            Intent intent = new Intent(mContext, WindowCallingActivity.class);
+            mContext.startActivity(intent);
+            processInvite(arg0, serverTransactionId);
         }
     }
+
+    private void incomingInvite(RequestEvent requestEvent,
+                                ServerTransaction serverTransaction) {
+        if (sipManagerState != SipManagerState.IDLE
+                && sipManagerState != SipManagerState.READY
+                && sipManagerState != SipManagerState.INCOMING
+                ) {
+            // sendDecline(requestEvent.getRequest());// Already in a call
+            return;
+        }
+        sipManagerState = SipManagerState.INCOMING;
+        Request request = requestEvent.getRequest();
+        SIPMessage sm = (SIPMessage) request;
+
+        try {
+
+            if (serverTransaction == null) {
+
+                serverTransaction = sipProvider.getNewServerTransaction(request);
+            }
+            if (serverTransaction == null) {
+                return;
+            }
+            //System.out.println("INVITE: with Authorization, sending Trying");
+            System.out.println("INVITE: sending Trying");
+            Response response = messageFactory.createResponse(Response.TRYING,
+                    request);
+            serverTransaction.sendResponse(response);
+            System.out.println("INVITE:Trying Sent");
+
+            byte[] rawContent = sm.getRawContent();
+            String sdpContent = new String(rawContent, "UTF-8");
+            SDPAnnounceParser parser = new SDPAnnounceParser(sdpContent);
+            SessionDescriptionImpl sessiondescription = parser.parse();
+
+            dispatchSipEvent(new SipEvent(this, SipEventType.LOCAL_RINGING, "",
+                    sm.getFrom().getAddress().toString()));
+            /*
+             * this.okResponse = messageFactory.createResponse(Response.OK,
+			 * request); Address address =
+			 * addressFactory.createAddress("Shootme <sip:" + myAddress + ":" +
+			 * myPort + ">"); ContactHeader contactHeader =
+			 * headerFactory.createContactHeader(address);
+			 * response.addHeader(contactHeader); ToHeader toHeader = (ToHeader)
+			 * okResponse.getHeader(ToHeader.NAME); toHeader.setTag("4321"); //
+			 * Application is supposed to set.
+			 * okResponse.addHeader(contactHeader); this.inviteTid = st; //
+			 * Defer sending the OK to simulate the phone ringing. // Answered
+			 * in 1 second ( this guy is fast at taking calls)
+			 * this.inviteRequest = request;
+			 *
+			 * new Timer().schedule(new MyTimerTask(this), 1000);
+			 */
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void incomingCancel(Request request,
+                                ServerTransaction serverTransactionId) {
+        try {
+            System.out.println("CANCEL received");
+            if (serverTransactionId == null) {
+                System.out.println("shootist:  null TID.");
+                return;
+            }
+            Dialog dialog = serverTransactionId.getDialog();
+            System.out.println("Dialog State = " + dialog.getState());
+            Response response = messageFactory.createResponse(200, request);
+            serverTransactionId.sendResponse(response);
+            System.out.println("Sending 200 Canceled Request");
+            System.out.println("Dialog State = " + dialog.getState());
+
+            if (serverTransactionId != null) {
+                // also send a 487 Request Terminated response to the original INVITE request
+                Request originalInviteRequest = serverTransactionId.getRequest();
+                Response originalInviteResponse = messageFactory.createResponse(Response.REQUEST_TERMINATED, originalInviteRequest);
+                serverTransactionId.sendResponse(originalInviteResponse);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(0);
+
+        }
+    }
+
+    public void sendOk(RequestEvent requestEvt) {
+        Response response;
+        try {
+            ServerTransaction serverTransaction = requestEvt
+                    .getServerTransaction();
+            if (serverTransaction == null) {
+                serverTransaction = sipProvider
+                        .getNewServerTransaction(requestEvt.getRequest());
+            }
+            response = messageFactory.createResponse(200,
+                    requestEvt.getRequest());
+            serverTransaction.sendResponse(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void processIOException(IOExceptionEvent exceptionEvent) {
+        System.out.println("IOException happened for "
+                + exceptionEvent.getHost() + " port = "
+                + exceptionEvent.getPort());
+
+    }
+
+    public void processTransactionTerminated(
+            TransactionTerminatedEvent transactionTerminatedEvent) {
+        System.out.println("Transaction terminated event recieved");
+    }
+
+    public void processDialogTerminated(
+            DialogTerminatedEvent dialogTerminatedEvent) {
+        System.out.println("dialogTerminatedEvent");
+
+    }
+
+    public void processTimeout(TimeoutEvent timeoutEvent) {
+
+        System.out.println("Transaction Time out");
+    }
+
 
     private void processBye(Request request,
                             ServerTransaction serverTransactionId) {
@@ -526,22 +633,22 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                     + remoteRtpPort);
             dispatchSipEvent(new SipEvent(this, SipEventType.LOCAL_RINGING, "",
                     sm.getFrom().getAddress().toString()));
-            /*
-             * this.okResponse = messageFactory.createResponse(Response.OK,
-			 * request); Address address =
-			 * addressFactory.createAddress("Shootme <sip:" + myAddress + ":" +
-			 * myPort + ">"); ContactHeader contactHeader =
-			 * headerFactory.createContactHeader(address);
-			 * response.addHeader(contactHeader); ToHeader toHeader = (ToHeader)
-			 * okResponse.getHeader(ToHeader.NAME); toHeader.setTag("4321"); //
-			 * Application is supposed to set.
-			 * okResponse.addHeader(contactHeader); this.inviteTid = st; //
-			 * Defer sending the OK to simulate the phone ringing. // Answered
-			 * in 1 second ( this guy is fast at taking calls)
-			 * this.inviteRequest = request;
-			 * 
-			 * new Timer().schedule(new MyTimerTask(this), 1000);
-			 */
+
+            Response okResponse = messageFactory.createResponse(Response.OK,
+                    request);
+            Address address = addressFactory.createAddress("Shootme <sip:" +
+                    sipProfile.getLocalIp() + ":" +
+                    sipProfile.getLocalPort() + ">");
+            ContactHeader contactHeader = headerFactory.createContactHeader(address);
+            response.addHeader(contactHeader);
+            ToHeader toHeader = (ToHeader)
+                    okResponse.getHeader(ToHeader.NAME);
+            toHeader.setTag(mTagCall[1]);
+            // Application is supposed to set.
+            okResponse.addHeader(contactHeader);
+            st.sendResponse(okResponse);
+
+            //new Timer().schedule(new MyTimerTask(this), 1000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -642,7 +749,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
         Register registerRequest = new Register();
         try {
-            final  Request r = registerRequest.MakeRequest(this);
+            final Request r = registerRequest.MakeRequest(this);
 
             // Send the request statefully, through the client transaction.
             Thread thread = new Thread() {
@@ -673,13 +780,14 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         Invite inviteRequest = new Invite();
         Request r = inviteRequest.MakeRequest(this, to, localRtpPort);
         try {
-             transaction = this.sipProvider
+            transaction = this.sipProvider
                     .getNewClientTransaction(r);
             currentClientTransaction = transaction;
             Thread thread = new Thread() {
                 public void run() {
                     try {
                         transaction.sendRequest();
+
                     } catch (SipException e) {
                         e.printStackTrace();
                     }
@@ -700,7 +808,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         try {
             Request r = inviteRequest.MakeRequest(this, to, message);
 
-             transaction = this.sipProvider
+            transaction = this.sipProvider
                     .getNewClientTransaction(r);
             Thread thread = new Thread() {
                 public void run() {
@@ -724,7 +832,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
         Invite inviteRequest = new Invite();
         byeRequest = inviteRequest.MakeByeRequest(this, "sip:"
-                +this.getSipProfile().getSipUserName() + "@"
+                + this.getSipProfile().getSipUserName() + "@"
                 + this.getSipProfile().getRemoteIp() + ";transport=UDP", 5060, mTagCall[1]);
 
         ClientTransaction newTransaction = null;
