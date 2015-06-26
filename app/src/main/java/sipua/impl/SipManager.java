@@ -216,12 +216,11 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             processInvite(arg0, serverTransactionId);
             Intent intent = new Intent(mContext, WindowCallingActivity.class);
             mContext.startActivity(intent);
-            try {
+
                 serverTransaction = arg0.getServerTransaction();
-                sendAck(request);
-            } catch (SipException e) {
-                e.printStackTrace();
-            }
+                sendOk(arg0);
+                //sendAck(request);
+           
         }
 
         /*if (request.getMethod().equals(Request.ACK)) {
