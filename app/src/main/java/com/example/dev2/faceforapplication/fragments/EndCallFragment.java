@@ -159,8 +159,8 @@ public class EndCallFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.imBt_end_call:
-                    DeviceImpl.GetInstance().Hangup();
                     getActivity().onBackPressed();
+                    DeviceImpl.GetInstance().Hangup();
                     break;
             }
         }
