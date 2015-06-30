@@ -28,4 +28,10 @@ dependencies {
     compile files('/home/dev3/Uniphone/uniphone/libs/jakarta-regexp-1.3.jar')
     compile files('/home/dev3/Uniphone/uniphone/libs/junit-3.8.1.jar')
     compile files('/home/dev3/Uniphone/uniphone/libs/log4j-1.2.15.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/android-jain-sip-ri-1.2.228.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/android-logging-log4j-1.0.3.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/concurrent.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/jakarta-regexp-1.3.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/junit-3.8.1.jar')
+    compile files('/home/dev2/AndroidStudioProjects/uniphone/libs/log4j-1.2.15.jar')
 }
