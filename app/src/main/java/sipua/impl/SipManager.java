@@ -36,6 +36,7 @@ import android.javax.sip.address.AddressFactory;
 import android.javax.sip.header.CSeqHeader;
 import android.javax.sip.header.CallIdHeader;
 import android.javax.sip.header.ContactHeader;
+import android.javax.sip.header.ContentTypeHeader;
 import android.javax.sip.header.Header;
 import android.javax.sip.header.HeaderFactory;
 import android.javax.sip.header.ToHeader;
@@ -94,10 +95,11 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
     private HashMap<String, String> customHeaders;
     private ClientTransaction currentClientTransaction = null;
     private RequestEvent requestEvent;
-    private String[] mTagCall;
+    private static String[] mTagCall;
     private Context mContext;
     private ServerTransaction serverTransaction;
     private ClientTransaction transaction;
+    private SoundManager soundManager;
 
     public SipProfile getSipProfile() {
 
@@ -314,7 +316,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
     public void processRequest(RequestEvent arg0) {
 
         requestEvent = arg0;
-        String s = arg0.getRequest().getMethod().toString();
+        String s = arg0.getRequest().getMethod();
         Request request = arg0.getRequest();
         ServerTransaction serverTransactionId = arg0.getServerTransaction();
         //currentCallTransaction = serverTransactionId;
@@ -343,8 +345,9 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
         }
         if (request.getMethod().equals(Request.INVITE)) {
-
+            soundManager = new SoundManager(mContext, sipProfile.getLocalIp());
             processInvite(arg0, serverTransactionId);
+            AcceptCall(sipProfile.getRemotePort(), soundManager.setupAudioStream(sipProfile.getLocalIp()));
             //sendOk(arg0);
             //incomingInvite(arg0, arg0.getServerTransaction());
 
@@ -651,7 +654,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
     }
 
 
-    /*public void AcceptCall(final int port) {
+    public void AcceptCall(final int port, final int remoteRtpPort) {
         if (currentCallTransaction == null)
             return;
         Thread thread = new Thread() {
@@ -667,45 +670,9 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                     responseOK.addHeader(contactHeader);
                     ToHeader toHeader = (ToHeader) responseOK
                             .getHeader(ToHeader.NAME);
-                    toHeader.setTag("4321"); // Application is supposed to set.
-                    responseOK.addHeader(contactHeader);
+                    toHeader.setTag(mTagCall[1]); // Application is supposed to set.
+                    responseOK.addHeader(toHeader);
 
-					*//*
-                     * SdpFactory sdpFactory = SdpFactory.getInstance();
-					 * SessionDescription sdp = null; long sessionID =
-					 * System.currentTimeMillis() & 0xffffff; long
-					 * sessionVersion = sessionID; String networkType =
-					 * Connection.IN; String addressType = Connection.IP4;
-					 *
-					 * sdp = sdpFactory.createSessionDescription();
-					 * sdp.setVersion(sdpFactory.createVersion(0));
-					 * sdp.setOrigin(sdpFactory.createOrigin(getUserName(),
-					 * sessionID, sessionVersion, networkType, addressType,
-					 * getLocalIp()));
-					 * sdp.setSessionName(sdpFactory.createSessionName
-					 * ("session"));
-					 * sdp.setConnection(sdpFactory.createConnection
-					 * (networkType, addressType, getLocalIp()));
-					 * Vector<Attribute> attributes = new
-					 * Vector<Attribute>();;// = testCase.getSDPAttributes();
-					 * Attribute a = sdpFactory.createAttribute("rtpmap",
-					 * "8 pcma/8000"); attributes.add(a);
-					 *
-					 * int[] audioMap = new int[attributes.size()]; for (int
-					 * index = 0; index < audioMap.length; index++) { String m =
-					 * attributes.get(index).getValue().split(" ")[0];
-					 * audioMap[index] = Integer.valueOf(m); } // generate media
-					 * descriptor MediaDescription md =
-					 * sdpFactory.createMediaDescription("audio",
-					 * SipStackAndroid.getLocalPort(), 1, "RTP/AVP", audioMap);
-					 *
-					 * // set attributes for formats
-					 *
-					 * md.setAttributes(attributes); Vector descriptions = new
-					 * Vector(); descriptions.add(md);
-					 *
-					 * sdp.setMediaDescriptions(descriptions);
-					 *//*
                     String sdpData = "v=0\r\n"
                             + "o=4855 13760799956958020 13760799956958020"
                             + " IN IP4 " + sipProfile.getLocalIp() + "\r\n"
@@ -735,7 +702,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         };
         thread.start();
         sipManagerState = SipManagerState.ESTABLISHED;
-    }*/
+    }
 
 
     @Override
