@@ -303,6 +303,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                 dialog.sendRequest(clientTransaction);
             } catch (SipException e) {
                 e.printStackTrace();
+                System.out.println("306 Exception " + e.toString());
             }
 
         }
@@ -347,18 +348,13 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             //sendOk(arg0);
             //incomingInvite(arg0, arg0.getServerTransaction());
 
-            Intent intent = new Intent(mContext, WindowCallingActivity.class);
-            mContext.startActivity(intent);
-            serverTransaction = arg0.getServerTransaction();
-
-
         }
 
 
         if (request.getMethod().equals(Request.ACK)) {
             Intent intent = new Intent(mContext, WindowCallingActivity.class);
             mContext.startActivity(intent);
-            processInvite(arg0, serverTransactionId);
+            //processInvite(arg0, serverTransactionId);
         }
     }
 
@@ -368,7 +364,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                 && sipManagerState != SipManagerState.READY
                 && sipManagerState != SipManagerState.INCOMING
                 ) {
-            // sendDecline(requestEvent.getRequest());// Already in a call
+            //sendDecline(requestEvent.getRequest());// Already in a call
             return;
         }
         sipManagerState = SipManagerState.INCOMING;
@@ -600,7 +596,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             currentCallTransaction = st;
 
             System.out.println("INVITE: with Authorization, sending Trying");
-            Response response = messageFactory.createResponse(Response.TRYING,
+            Response response = messageFactory.createResponse(Response.RINGING,
                     request);
             st.sendResponse(response);
             System.out.println("INVITE:Trying Sent");
@@ -833,7 +829,8 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         Invite inviteRequest = new Invite();
         byeRequest = inviteRequest.MakeByeRequest(this, "sip:"
                 + this.getSipProfile().getSipUserName() + "@"
-                + this.getSipProfile().getRemoteIp() + ";transport=UDP", 5060, mTagCall[1]);
+                + this.getSipProfile().getRemoteIp() + ";transport=UDP",
+                getSipProfile().getRemotePort(), mTagCall[1]);
 
         ClientTransaction newTransaction = null;
 
