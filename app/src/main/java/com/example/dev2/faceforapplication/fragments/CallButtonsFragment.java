@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import sipua.IDevice;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -176,10 +177,10 @@ public class CallButtonsFragment extends Fragment {
                     if (InputPlaceFragment.getTextFromTextView().equals("")) {
                         Toast.makeText(getActivity(), "Input number phone", Toast.LENGTH_SHORT).show();
                     }else {
-                        makeCall();
                         Intent intent = new Intent(getActivity(), CallActivity.class);
                         getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
+                        makeCall();
                         InputPlaceFragment.setTextInToTextView("");
                     }
                     break;
@@ -188,15 +189,20 @@ public class CallButtonsFragment extends Fragment {
     };
 
     private void makeCall() {
+
+        IDevice inter = new DeviceImpl();
+
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
 
-        //globalData.setOutCallNumber(mCallAddress);
-        DeviceImpl.GetInstance().Call(
-                "sip:" + mCallAddress +
-                        "@" + mSipProfile.getRemoteIp() +
-                        ":" + mSipProfile.getRemotePort());
-
-
+//        //globalData.setOutCallNumber(mCallAddress);
+//        DeviceImpl.GetInstance().Call(
+//                "sip:" + mCallAddress +
+//                        "@" + mSipProfile.getRemoteIp() +
+//                        ":" + mSipProfile.getRemotePort());
+//
+        inter.Call("sip:" + mCallAddress +
+                "@" + mSipProfile.getRemoteIp() +
+                ":" + mSipProfile.getRemotePort());
     }
 
 }

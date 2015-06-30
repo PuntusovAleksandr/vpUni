@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import sipua.IDevice;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -179,22 +180,27 @@ public class HistoryFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
-            makeCall();
             Intent intent = new Intent(getActivity(), CallActivity.class);
             getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
             startActivity(intent);
+            makeCall();
             InputPlaceFragment.setTextInToTextView("");
         }
     };
 
     private void makeCall() {
+        IDevice inter = new DeviceImpl();
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
         SipProfile mSipProfile = new SipProfile();
         //globalData.setOutCallNumber(mCallAddress);
-        DeviceImpl.GetInstance().Call(
-                "sip:" + mCallAddress +
-                        "@" + mSipProfile.getRemoteIp() +
-                        ":" + mSipProfile.getRemotePort());
+//        DeviceImpl.GetInstance().Call(
+//                "sip:" + mCallAddress +
+//                        "@" + mSipProfile.getRemoteIp() +
+//                        ":" + mSipProfile.getRemotePort());
+
+        inter.Call("sip:" + mCallAddress +
+                "@" + mSipProfile.getRemoteIp() +
+                ":" + mSipProfile.getRemotePort());
     }
 
 }

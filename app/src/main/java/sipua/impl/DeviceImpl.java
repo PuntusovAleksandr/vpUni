@@ -32,7 +32,7 @@ public class DeviceImpl implements IDevice, Serializable {
     public SipUADeviceListener deviceListener = null;
     public SipUAConnectionListener connectionListener = null;
 
-    private DeviceImpl() {
+    public DeviceImpl() {
 
     }
 
