@@ -27,10 +27,9 @@ import sipua.impl.DeviceImpl;
 public class EndCallFragment extends Fragment {
 
     /**
-     * The constant TAG.
+     * The constant TAG.which is necessary for creating registration fragment
      */
     public static final String TAG ="EndCallFragment";
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -118,23 +117,6 @@ public class EndCallFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -154,13 +136,17 @@ public class EndCallFragment extends Fragment {
 // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+    /**
+     * The Listener.
+     */
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.imBt_end_call:
-                    DeviceImpl.GetInstance().Hangup();
                     getActivity().onBackPressed();
+                    DeviceImpl.GetInstance().Hangup();
                     break;
             }
         }

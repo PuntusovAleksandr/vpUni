@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import sipua.IDevice;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -30,11 +31,13 @@ import sipua.impl.DeviceImpl;
  */
 public class HistoryFragment extends Fragment {
 
+    /**
+     * The constant TAG.which is necessary for creating registration fragment
+     */
     public static final String TAG ="HistoryFragment";
 
     private ListView listHistory;
     private ArrayAdapter<String> adapter;
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,9 +50,11 @@ public class HistoryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-
     private static HistoryFragment fragment;
     private View historyFragment;
+    /**
+     * The Names.
+     */
     String[] names = {
             "3001",
             "3002",
@@ -70,8 +75,6 @@ public class HistoryFragment extends Fragment {
         }
         return fragment;
     }
-
-
 
     /**
      * Use this factory method to create a new instance of
@@ -105,10 +108,6 @@ public class HistoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
-
     }
 
     @Override
@@ -138,23 +137,6 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -175,19 +157,29 @@ public class HistoryFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * The Listener.
+     */
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
-            makeCall();
             Intent intent = new Intent(getActivity(), CallActivity.class);
             getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
             startActivity(intent);
+            makeCall();
             InputPlaceFragment.setTextInToTextView("");
         }
     };
 
     private void makeCall() {
+
+        // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением
+        // IDevice inter = new DeviceImpl();
+        // inter.Call("sip:" + mCallAddress + "@" + mSipProfile.getRemoteIp() + ":" + mSipProfile.getRemotePort());
+
+        // так же необходимо переименовать конструктор по умолчанию в классе DeviceImpl на public
+
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
         SipProfile mSipProfile = new SipProfile();
         //globalData.setOutCallNumber(mCallAddress);
@@ -195,6 +187,7 @@ public class HistoryFragment extends Fragment {
                 "sip:" + mCallAddress +
                         "@" + mSipProfile.getRemoteIp() +
                         ":" + mSipProfile.getRemotePort());
+
     }
 
 }

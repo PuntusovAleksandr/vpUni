@@ -23,7 +23,9 @@ import com.example.dev2.faceforapplication.R;
  */
 public class ContactsFragment extends Fragment {
 
-
+    /**
+     * The constant TAG.which is necessary for creating registration fragment
+     */
     public static final String TAG ="ContactsFragment";
 
     // TODO: Rename parameter arguments, choose names that match
@@ -63,7 +65,6 @@ public class ContactsFragment extends Fragment {
         }
         return fragment;
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -110,7 +111,6 @@ public class ContactsFragment extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
         listViewContacts.setAdapter(adapter);
 
-
         return contactsFragment;
     }
 
@@ -125,23 +125,6 @@ public class ContactsFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
     /**
      * This interface must be implemented by activities that contain this

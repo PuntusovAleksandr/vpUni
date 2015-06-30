@@ -19,17 +19,47 @@ import android.widget.Toast;
 
 import com.example.dev2.faceforapplication.R;
 
+/**
+ * The type Setting activity.
+ */
 public class SettingActivity extends AppCompatActivity {
 
+    /**
+     * The Name.
+     */
     String name = "User name";
+    /**
+     * The Password.
+     */
     String password = "Password";
+    /**
+     * The Server.
+     */
     String server = "Server";
+    /**
+     * The Domain.
+     */
     String domain = "Domain";
+    /**
+     * The Use 3 g.
+     */
     String use3g = "Use 3 G";
+    /**
+     * The Notifications.
+     */
     String notifications = " Notifications";
+    /**
+     * The Call setting.
+     */
     String callSetting = "Call settings";
+    /**
+     * The About.
+     */
     String about = "About";
 
+    /**
+     * The Names.
+     */
     String[] names = {
             name,
             password,

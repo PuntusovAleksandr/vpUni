@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import sipua.IDevice;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -31,7 +32,7 @@ import sipua.impl.DeviceImpl;
 public class CallButtonsFragment extends Fragment {
 
     /**
-     * The constant TAG.
+     * The constant TAG.which is necessary for creating registration fragment
      */
     public static final String TAG ="CallButtonsFragment";
     private ImageButton btCall;
@@ -66,7 +67,6 @@ public class CallButtonsFragment extends Fragment {
         }
         return fragment;
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -129,24 +129,6 @@ public class CallButtonsFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -167,7 +149,9 @@ public class CallButtonsFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-
+    /**
+     * The Listener.
+     */
     View.OnClickListener  listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -188,6 +172,11 @@ public class CallButtonsFragment extends Fragment {
     };
 
     private void makeCall() {
+
+        //// TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением
+        // inter.Call("sip:" + mCallAddress +"@" + mSipProfile.getRemoteIp() +":" + mSipProfile.getRemotePort());
+        // так же необходимо переименовать конструктор по умолчанию в классе DeviceImpl на public
+
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
 
         //globalData.setOutCallNumber(mCallAddress);
@@ -195,8 +184,6 @@ public class CallButtonsFragment extends Fragment {
                 "sip:" + mCallAddress +
                         "@" + mSipProfile.getRemoteIp() +
                         ":" + mSipProfile.getRemotePort());
-
-
     }
 
 }

@@ -24,10 +24,9 @@ import com.example.dev2.faceforapplication.R;
 public class InputPlaceFragment extends Fragment {
 
     /**
-     * The constant TAG.
+     * The constant TAG.which is necessary for creating registration fragment
      */
     public static final String TAG ="InputPlaceFragment";
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -141,23 +140,6 @@ public class InputPlaceFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
     /**
      * This interface must be implemented by activities that contain this
