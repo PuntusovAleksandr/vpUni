@@ -26,7 +26,7 @@ import com.example.dev2.faceforapplication.R;
 public class ButtonsFragment extends Fragment {
 
     /**
-     * The constant TAG.
+     * The constant TAG.which is necessary for creating registration fragment
      */
     public static final String TAG ="ButtonsFragment";
 
@@ -42,15 +42,18 @@ public class ButtonsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * for create object clss
+     */
     private static ButtonsFragment fragment;
 
     private View buttonsFrgment;
 
-//    private ImageButton btCleane;
+    /**
+     * nicialication  params
+     */
     private ImageButton btStar;
-//    private ImageButton btZero;
     private ImageButton btPount;
-//    public static  TextView textView;
 
     private String idButton = "";
     private int idIntButton;
@@ -60,11 +63,9 @@ public class ButtonsFragment extends Fragment {
 
     private String text;
     /**
-     * The constant tg.
+     * The constant tg. for creating signal buttons
      */
     public static  ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, (int)(ToneGenerator.MAX_VOLUME * 1));;
-
-//    :	tg.startTone(ToneGenerator.TONE_PROP_BEEP);
 
     /**
      * Use this factory method to create a new instance of
@@ -119,28 +120,20 @@ public class ButtonsFragment extends Fragment {
         setRetainInstance(true);
         buttonsFrgment = View.inflate(getActivity(), R.layout.fragment_buttons, null);
 
-//        btCleane = (ImageButton) buttonsFrgment.findViewById(R.id.imageButton);
-        btStar = (ImageButton) buttonsFrgment.findViewById(R.id.imBt_11);
-//        btZero = (ImageButton) buttonsFrgment.findViewById(R.id.imBt_10);
-        btPount = (ImageButton) buttonsFrgment.findViewById(R.id.imBt_12);
-//        textView = (TextView) buttonsFrgment.findViewById(R.id.textView);
+
+        btStar = (ImageButton) buttonsFrgment.findViewById(R.id.imBt_11);       // поиск элементов во рагменте
+        btPount = (ImageButton) buttonsFrgment.findViewById(R.id.imBt_12);      // поиск элементов во рагменте
+
+        btStar.setOnClickListener(listener);        // присвоение кнопки слушателя
+        btPount.setOnClickListener(listener);       // присвоение кнопки слушателя
 
 
-//        btCleane.setOnClickListener(listener);
-        btStar.setOnClickListener(listener);
-//        btZero.setOnClickListener(listener);
-        btPount.setOnClickListener(listener);
-
-
-
-
-
+        // inicialication buutons
         for (int j = 1; j < 11; j++) {
-            idButton = "imBt_" + j;
-            idIntButton = getResources()
+            idButton = "imBt_" + j;             // создаие id кнопки
+            idIntButton = getResources()        // получение ресурса
                     .getIdentifier(idButton, "id", getActivity().getPackageName());
             bt[j] = (ImageButton) buttonsFrgment.findViewById(idIntButton);
-//            bt[j].setId(j);
             ;
             int finalJ=0;
             if (j == 10) {
@@ -153,18 +146,14 @@ public class ButtonsFragment extends Fragment {
             bt[j].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    textView.setText(textView.getText().toString()+ b);
                     text =InputPlaceFragment.getTextFromTextView();
                     saveText  = text + b;
                     InputPlaceFragment.setTextInToTextView(saveText);
-                    tg.startTone(Integer.parseInt(b));
-                    if (tg != null) tg.stopTone();
+                    tg.startTone(Integer.parseInt(b));          // добавление музыкального сопровождение кнопок
+                    if (tg != null) tg.stopTone();              // закрытие потока звука
                 }
             });
         }if (tg !=null)  tg.stopTone();
-
-
-
         return buttonsFrgment;
     }
 
@@ -179,24 +168,6 @@ public class ButtonsFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -219,7 +190,7 @@ public class ButtonsFragment extends Fragment {
     }
 
     /**
-     * The Listener.
+     * The Listener. When buttons click
      */
     View.OnClickListener listener = new View.OnClickListener() {
 
@@ -244,8 +215,4 @@ public class ButtonsFragment extends Fragment {
             if (tg !=null)  tg.stopTone();
         }
     };
-
-
-
-
 }

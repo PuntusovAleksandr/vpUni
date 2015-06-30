@@ -35,6 +35,9 @@ import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 import sipua.impl.SipManager;
 
+/**
+ * The type View page activity.
+ */
 public class ViewPageActivity extends AppCompatActivity implements ActionBar.TabListener,
         ButtonsFragment.OnFragmentInteractionListener,
         CallButtonsFragment.OnFragmentInteractionListener,
@@ -73,13 +76,12 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-
-
         /**
          * Registration sip in asterisk
          * TODO now registration on 3001 only, need preferences ready to make reg with other users
          * */
         mSipProfile = new SipProfile();
+
         //initialize device
         DeviceImpl.GetInstance().initialize(this, mSipProfile);
 
@@ -97,8 +99,6 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         /**
          * end of registration
          */
-
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         startPageFragment = new StartPageFragment().newInstance();
@@ -139,7 +139,6 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -160,7 +159,6 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -181,7 +179,6 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     /**
@@ -190,10 +187,18 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        /**
+         * The Fragment.
+         */
         Fragment fragment = null;
         private List<Fragment> fragmentList;
 
-
+        /**
+         * Instantiates a new Sections pager adapter.
+         *
+         * @param fm the fm
+         * @param fragmentList the fragment list
+         */
         public SectionsPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
             super(fm);
             this.fragmentList = fragmentList;
@@ -229,38 +234,4 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
             return null;
         }
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_view_page, container, false);
-//            return rootView;
-//        }
-//    }
-
 }

@@ -31,11 +31,13 @@ import sipua.impl.DeviceImpl;
  */
 public class HistoryFragment extends Fragment {
 
+    /**
+     * The constant TAG.which is necessary for creating registration fragment
+     */
     public static final String TAG ="HistoryFragment";
 
     private ListView listHistory;
     private ArrayAdapter<String> adapter;
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,9 +50,11 @@ public class HistoryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-
     private static HistoryFragment fragment;
     private View historyFragment;
+    /**
+     * The Names.
+     */
     String[] names = {
             "3001",
             "3002",
@@ -71,8 +75,6 @@ public class HistoryFragment extends Fragment {
         }
         return fragment;
     }
-
-
 
     /**
      * Use this factory method to create a new instance of
@@ -106,10 +108,6 @@ public class HistoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
-
     }
 
     @Override
@@ -139,23 +137,6 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -176,6 +157,9 @@ public class HistoryFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * The Listener.
+     */
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
