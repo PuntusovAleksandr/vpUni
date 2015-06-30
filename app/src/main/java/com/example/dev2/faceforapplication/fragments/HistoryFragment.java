@@ -127,7 +127,10 @@ public class HistoryFragment extends Fragment {
         return historyFragment;
     }
 
-    /**
+    /**nstance().Call(
+                "sip:" + mCallAddress +
+                        "@" + mSipProfile.getRemoteIp() +
+                        ":" + mSipProfile.getRem
      * On button pressed.
      *
      * @param uri the uri
