@@ -127,10 +127,7 @@ public class HistoryFragment extends Fragment {
         return historyFragment;
     }
 
-    /**nstance().Call(
-                "sip:" + mCallAddress +
-                        "@" + mSipProfile.getRemoteIp() +
-                        ":" + mSipProfile.getRem
+    /**
      * On button pressed.
      *
      * @param uri the uri
@@ -192,18 +189,21 @@ public class HistoryFragment extends Fragment {
     };
 
     private void makeCall() {
-        IDevice inter = new DeviceImpl();
+
+        // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением
+        // IDevice inter = new DeviceImpl();
+        // inter.Call("sip:" + mCallAddress + "@" + mSipProfile.getRemoteIp() + ":" + mSipProfile.getRemotePort());
+
+        // так же необходимо переименовать конструктор по умолчанию в классе DeviceImpl на public
+
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
         SipProfile mSipProfile = new SipProfile();
         //globalData.setOutCallNumber(mCallAddress);
-//        DeviceImpl.GetInstance().Call(
-//                "sip:" + mCallAddress +
-//                        "@" + mSipProfile.getRemoteIp() +
-//                        ":" + mSipProfile.getRemotePort());
+        DeviceImpl.GetInstance().Call(
+                "sip:" + mCallAddress +
+                        "@" + mSipProfile.getRemoteIp() +
+                        ":" + mSipProfile.getRemotePort());
 
-        inter.Call("sip:" + mCallAddress +
-                "@" + mSipProfile.getRemoteIp() +
-                ":" + mSipProfile.getRemotePort());
     }
 
 }
