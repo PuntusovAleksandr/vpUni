@@ -726,7 +726,8 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         Invite inviteRequest = new Invite();
         byeRequest = inviteRequest.MakeByeRequest(this, "sip:"
                 +this.getSipProfile().getSipUserName() + "@"
-                + this.getSipProfile().getRemoteIp() + ";transport=UDP", 5060, mTagCall[1]);
+                + this.getSipProfile().getRemoteIp() +
+                ";transport=UDP", getSipProfile().getRemotePort(), mTagCall[1]);
 
         ClientTransaction newTransaction = null;
 
