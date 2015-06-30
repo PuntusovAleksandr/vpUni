@@ -43,7 +43,11 @@ public class StartPageFragment extends Fragment {
 
     private static StartPageFragment fragment;
 
-
+    /**
+     * New instance.
+     *
+     * @return the start page fragment
+     */
     public StartPageFragment newInstance() {
         if (fragment == null) {
             fragment = new StartPageFragment();
@@ -69,6 +73,9 @@ public class StartPageFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Instantiates a new Start page fragment.
+     */
     public StartPageFragment() {
         // Required empty public constructor
     }
@@ -104,64 +111,18 @@ public class StartPageFragment extends Fragment {
 
         return viewStartPageFragment;
     }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//
-//        if (!transaction.isEmpty()) {
-//            transaction = manager.beginTransaction();
-//            transaction.remove(inputPlaceFragment);
-//            transaction.remove(buttonsFragment);
-//            transaction.remove(callButtonsFragment);
-//            transaction.commit();
-////            transaction.replace(R.id.ll_head, inputPlaceFragment, InputPlaceFragment.TAG);
-////            transaction.replace(R.id.ll_body, buttonsFragment, ButtonsFragment.TAG);
-////            transaction.replace(R.id.ll_bottom, callButtonsFragment, CallButtonsFragment.TAG);
-//
-//        }
-//    }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//
-//        if (!transaction.isEmpty()) {
-//            transaction = manager.beginTransaction();
-//            transaction.remove(inputPlaceFragment);
-//            transaction.remove(buttonsFragment);
-//            transaction.remove(callButtonsFragment);
-//            transaction.commit();
-////            transaction.replace(R.id.ll_head, inputPlaceFragment, InputPlaceFragment.TAG);
-////            transaction.replace(R.id.ll_body, buttonsFragment, ButtonsFragment.TAG);
-////            transaction.replace(R.id.ll_bottom, callButtonsFragment, CallButtonsFragment.TAG);
-//
-//        }
-//    }
-
-    // TODO: Rename method, update argument and hook method into UI event
+    /**
+     * On button pressed.
+     *
+     * @param uri the uri
+     */
+// TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -174,7 +135,12 @@ public class StartPageFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        /**
+         * On fragment interaction.
+         *
+         * @param uri the uri
+         */
+// TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

@@ -98,9 +98,12 @@ public class Invite {
                     + "o=4855 13760799956958020 13760799956958020"
                     + " IN IP4 " + sipManager.getSipProfile().getLocalIp() + "\r\n" + "s=mysession session\r\n"
                     + "p=+46 8 52018010\r\n" + "c=IN IP4 " + sipManager.getSipProfile().getLocalIp() + "\r\n"
-                    + "t=0 0\r\n" + "m=audio " + port + " RTP/AVP 0 4 18\r\n"
-                    + "a=rtpmap:0 PCMU/8000\r\n" + "a=rtpmap:4 G723/8000\r\n"
-                    + "a=rtpmap:18 G729A/8000\r\n" + "a=ptime:20\r\n";
+                    + "t=0 0\r\n"
+                    + "m=audio " + port + " RTP/AVP 0 4 18\r\n"
+                    + "a=rtpmap:0 PCMU/8000\r\n"
+                    + "a=rtpmap:4 G723/8000\r\n"
+                    + "a=rtpmap:18 G729A/8000\r\n"
+                    + "a=ptime:20\r\n";
             byte[] contents = sdpData.getBytes();
 
             callRequest.setContent(contents, contentTypeHeader);

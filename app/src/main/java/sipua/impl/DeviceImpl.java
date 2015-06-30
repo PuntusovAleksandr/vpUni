@@ -32,6 +32,9 @@ public class DeviceImpl implements IDevice, Serializable {
     public SipUADeviceListener deviceListener = null;
     public SipUAConnectionListener connectionListener = null;
 
+
+    // TODO: 30.06.15 для правильности работы при вызове и при выборе в истории, необходимо переименоватть конструктор в public
+
     private DeviceImpl() {
 
     }

@@ -32,7 +32,6 @@ public class MainActivity extends ActionBarActivity implements
         CallButtonsFragment.OnFragmentInteractionListener,
         InputPlaceFragment.OnFragmentInteractionListener {
 
-
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
@@ -49,9 +48,6 @@ public class MainActivity extends ActionBarActivity implements
 
     private View viewEditeText;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +61,6 @@ public class MainActivity extends ActionBarActivity implements
         buttonsFragment = new ButtonsFragment().newInstance();
         callButtonsFragment = new CallButtonsFragment().newInstance();
         inputPlaceFragment = new InputPlaceFragment().newInstance();
-
-
-
 
         if (savedInstanceState == null) {
             transaction = manager.beginTransaction();
@@ -94,7 +87,6 @@ public class MainActivity extends ActionBarActivity implements
                 if (buttFragmentByTag != null && callButtFragmentByTag != null) {
                     InputPlaceFragment.setTextInToTextView("");
                     intent = new Intent(MainActivity.this, CallActivity.class);
-//                    intent = new Intent(MainActivity.this, WindowCallingActivity.class);
                     startActivity(intent);
                 }
                 break;
@@ -106,7 +98,6 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {    }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -114,7 +105,6 @@ public class MainActivity extends ActionBarActivity implements
 
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -19,6 +19,9 @@ import com.example.dev2.faceforapplication.fragments.EndCallFragment;
 import com.example.dev2.faceforapplication.fragments.IconFragment;
 import com.example.dev2.faceforapplication.fragments.InputPlaceFragment;
 
+/**
+ * The type Window calling activity.
+ */
 public class WindowCallingActivity extends AppCompatActivity implements
         IconFragment.OnFragmentInteractionListener,
         CallButtonsFragment.OnFragmentInteractionListener,
@@ -31,7 +34,6 @@ public class WindowCallingActivity extends AppCompatActivity implements
     private CallButtonsFragment callButtonsFragment;
     private EndCallFragment endCallFragment;
     private Intent intent;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +56,13 @@ public class WindowCallingActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Uri uri) {    }
 
-    }
-
+    /**
+     * On click buttons call.
+     *
+     * @param view the view
+     */
     public void onClickButtonsCall(View view) {
         transaction = manager.beginTransaction();
         Fragment callButtFragmentByTag = manager.findFragmentByTag(CallButtonsFragment.TAG);
@@ -73,6 +78,12 @@ public class WindowCallingActivity extends AppCompatActivity implements
         }
         transaction.commit();
     }
+
+    /**
+     * On click from other activity.
+     *
+     * @param view the view
+     */
     public void onClickFromOtherActivity(View view) {
         transaction = manager.beginTransaction();
         Fragment callButtFragmentByTag = manager.findFragmentByTag(CallButtonsFragment.TAG);
@@ -86,27 +97,4 @@ public class WindowCallingActivity extends AppCompatActivity implements
         }
         transaction.commit();
     }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_window_calling, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }
