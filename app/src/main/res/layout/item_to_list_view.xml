@@ -12,6 +12,7 @@
         android:layout_marginRight="10px"
         android:layout_marginTop="10px"
         android:layout_marginBottom="10px"
+
         android:src="@drawable/icon_contact">
     </ImageView>
 
