@@ -92,8 +92,10 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         mSipProfile.setLocalPort(5060);
         mSipProfile.setRemoteIp("192.168.88.100");
         mSipProfile.setRemotePort(5060);
+
         mSipProfile.setSipUserName("3001");
         mSipProfile.setSipPassword("3001");
+
         mSipProfile.setTransport("UDP");
         mSipProfile.setLocalIp(SipManager.getIPAddress(true));
 
