@@ -200,7 +200,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         Header d = response.getHeader("To");
         String s = d.toString();
         mTagCall = s.split("(;)");
-        //s.split("\\=");
+
         Dialog responseDialog;
         ClientTransaction tid = arg0.getClientTransaction();
         if (tid != null) {
@@ -308,6 +308,10 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                 System.out.println("306 Exception " + e.toString());
             }
 
+        } else if (response.getStatusCode() == Response.RINGING) {
+
+
+
         }
 
     }
@@ -345,16 +349,14 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
         }
         if (request.getMethod().equals(Request.INVITE)) {
-            soundManager = new SoundManager(mContext, sipProfile.getLocalIp());
+
             processInvite(arg0, serverTransactionId);
-            AcceptCall(sipProfile.getRemotePort(), soundManager.setupAudioStream(sipProfile.getLocalIp()));
-            //sendOk(arg0);
-            //incomingInvite(arg0, arg0.getServerTransaction());
 
         }
 
 
         if (request.getMethod().equals(Request.ACK)) {
+            soundManager = new SoundManager(mContext, sipProfile.getLocalIp());
             Intent intent = new Intent(mContext, WindowCallingActivity.class);
             mContext.startActivity(intent);
             //processInvite(arg0, serverTransactionId);
@@ -599,13 +601,18 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             currentCallTransaction = st;
 
             System.out.println("INVITE: with Authorization, sending Trying");
+
+            Response tryingResponse = messageFactory.createResponse(Response.TRYING,
+                    request);
+            st.sendResponse(tryingResponse);
+
             Response response = messageFactory.createResponse(Response.RINGING,
                     request);
             st.sendResponse(response);
             System.out.println("INVITE:Trying Sent");
             // Verify AUTHORIZATION !!!!!!!!!!!!!!!!
 
-            dsam = new DigestServerAuthenticationHelper();
+           /* dsam = new DigestServerAuthenticationHelper();
 
             if (!dsam.doAuthenticatePlainTextPassword(request,
                     sipProfile.getSipPassword())) {
@@ -619,7 +626,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
             }
             System.out
-                    .println("INVITE:Incoming Authorization challenge Accepted");
+                    .println("INVITE:Incoming Authorization challenge Accepted");*/
 
             byte[] rawContent = sm.getRawContent();
             String sdpContent = new String(rawContent, "UTF-8");
@@ -635,14 +642,14 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
             Response okResponse = messageFactory.createResponse(Response.OK,
                     request);
-            Address address = addressFactory.createAddress("Shootme <sip:" +
+            Address address = addressFactory.createAddress("<sip:" +
                     sipProfile.getLocalIp() + ":" +
                     sipProfile.getLocalPort() + ">");
             ContactHeader contactHeader = headerFactory.createContactHeader(address);
             response.addHeader(contactHeader);
             ToHeader toHeader = (ToHeader)
                     okResponse.getHeader(ToHeader.NAME);
-            toHeader.setTag(mTagCall[1]);
+            toHeader.setTag("a53e42");
             // Application is supposed to set.
             okResponse.addHeader(contactHeader);
             st.sendResponse(okResponse);

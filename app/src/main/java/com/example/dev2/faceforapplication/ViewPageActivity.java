@@ -1,5 +1,7 @@
 package com.example.dev2.faceforapplication;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -70,6 +72,7 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_view_page);
 
         // Set up the action bar.
@@ -89,8 +92,8 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         mSipProfile.setLocalPort(5060);
         mSipProfile.setRemoteIp("192.168.88.100");
         mSipProfile.setRemotePort(5060);
-        mSipProfile.setSipUserName("3006");
-        mSipProfile.setSipPassword("3006");
+        mSipProfile.setSipUserName("3001");
+        mSipProfile.setSipPassword("3001");
         mSipProfile.setTransport("UDP");
         mSipProfile.setLocalIp(SipManager.getIPAddress(true));
 
