@@ -1,7 +1,5 @@
 package com.example.dev2.faceforapplication.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.dev2.faceforapplication.R;
-import com.example.dev2.faceforapplication.ViewPageActivity;
-import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
 import sipua.impl.DeviceImpl;
 
@@ -145,8 +141,8 @@ public class EndCallFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.imBt_end_call:
-                    getActivity().onBackPressed();
                     DeviceImpl.GetInstance().Hangup();
+                    getActivity().onBackPressed();
                     break;
             }
         }

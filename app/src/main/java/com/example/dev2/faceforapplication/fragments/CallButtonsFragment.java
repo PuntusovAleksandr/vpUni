@@ -1,9 +1,6 @@
 package com.example.dev2.faceforapplication.fragments;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,14 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
-import sipua.IDevice;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -181,6 +176,7 @@ public class CallButtonsFragment extends Fragment {
                         getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
 //                        makeCall();
+                        getActivity().finish();
                         InputPlaceFragment.setTextInToTextView("");
                     }
                     break;
