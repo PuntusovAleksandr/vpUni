@@ -1,30 +1,19 @@
 package com.example.dev2.faceforapplication;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.dev2.faceforapplication.fragments.ButtonsFragment;
 import com.example.dev2.faceforapplication.fragments.CallButtonsFragment;
 import com.example.dev2.faceforapplication.fragments.ContactsFragment;
@@ -33,6 +22,11 @@ import com.example.dev2.faceforapplication.fragments.InputPlaceFragment;
 import com.example.dev2.faceforapplication.fragments.StartPageFragment;
 import com.example.dev2.faceforapplication.otherActivity.SettingActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import io.fabric.sdk.android.Fabric;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 import sipua.impl.SipManager;
@@ -93,8 +87,8 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
         mSipProfile.setRemoteIp("192.168.88.100");
         mSipProfile.setRemotePort(5060);
 
-        mSipProfile.setSipUserName("3001");
-        mSipProfile.setSipPassword("3001");
+        mSipProfile.setSipUserName("3005");
+        mSipProfile.setSipPassword("3005");
 
         mSipProfile.setTransport("UDP");
         mSipProfile.setLocalIp(SipManager.getIPAddress(true));

@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
-import com.example.dev2.faceforapplication.MainActivity;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.fragments.EndCallFragment;
 import com.example.dev2.faceforapplication.fragments.IconFragment;
@@ -38,8 +37,8 @@ public class CallActivity extends FragmentActivity  implements
 
 
         manager = getSupportFragmentManager();
-        endCallFragment = new EndCallFragment().newInstance();
-        iconFragment = new IconFragment().newInstance();
+        endCallFragment = new EndCallFragment(); // .newInstance();
+        iconFragment = new IconFragment();  // .newInstance();
 
         if (savedInstanceState == null) {
         transaction = manager.beginTransaction();

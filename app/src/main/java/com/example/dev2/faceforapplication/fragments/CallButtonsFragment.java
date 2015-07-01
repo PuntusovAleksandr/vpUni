@@ -180,7 +180,7 @@ public class CallButtonsFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), CallActivity.class);
                         getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
-                        makeCall();
+//                        makeCall();
                         InputPlaceFragment.setTextInToTextView("");
                     }
                     break;
