@@ -1,6 +1,10 @@
 package com.example.dev2.faceforapplication.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,10 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.dev2.faceforapplication.R;
+import com.example.dev2.faceforapplication.otherActivity.CallActivity;
+
+import java.util.ArrayList;
+
+import sipua.SipProfile;
+import sipua.impl.DeviceImpl;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,16 +55,20 @@ public class ContactsFragment extends Fragment {
     private View contactsFragment;
 
     private ListView listViewContacts;
-    private ArrayAdapter<String> adapter;
+//    private ArrayAdapter<String> adapter;
+    private MyAdapter adapter;
 
-    private String[] names = {
-            "3001",
-            "3002",
-            "3003",
-            "3004",
-            "3005",
-            "3006"
-    };
+//    private String[] names = {
+//            "3001",
+//            "3002",
+//            "3003",
+//            "3004",
+//            "3005",
+//            "3006"
+//    };
+
+    ArrayList<String> names;
+
 
     /**
      * New instance.
@@ -105,10 +121,20 @@ public class ContactsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setRetainInstance(true);
+
+        names  = new ArrayList<>();
+        names.add("3001");
+        names.add("3002");
+        names.add("3003");
+        names.add("3004");
+        names.add("3005");
+
         contactsFragment = View.inflate(getActivity(), R.layout.fragment_contacts, null);
         listViewContacts = (ListView) contactsFragment.findViewById(R.id.list_contacts);
         listViewContacts.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
+        listViewContacts.setOnItemClickListener(listener);
+        adapter = new MyAdapter(getActivity(), names);
+//        adapter = new ArrayAdapter<String>(getActivity(),R.layout.item_to_list_view, R.id.icon_in_list, names);
         listViewContacts.setAdapter(adapter);
 
         return contactsFragment;
@@ -146,4 +172,89 @@ public class ContactsFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    public class MyAdapter extends ArrayAdapter {
+
+        private Context mContext;
+        private ArrayList<String> mStrings;
+
+        public MyAdapter(Context context, ArrayList<String> strings) {
+            super(context, 0, strings);
+            mContext = context;
+            mStrings = strings;
+        }
+
+        @Override
+        public View getView(final int position, View convertView,
+                            ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = View.inflate(mContext, R.layout.item_to_list_view, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+
+            } else {
+
+                holder = (ViewHolder) convertView.getTag();
+
+            }
+
+            holder.news.setText(mStrings.get(position));
+
+            return convertView;
+
+        }
+
+
+        class ViewHolder {
+            TextView news;
+
+            public ViewHolder(View v){
+                news =(TextView) v.findViewById(R.id.tex_label_in_list);
+                news.setTextColor(0xFFFFFFFF);
+
+            }
+        }
+    }
+    AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Call this contact ? ");
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), CallActivity.class);
+                    getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+                    startActivity(intent);
+                    makeCall();
+                    InputPlaceFragment.setTextInToTextView("");
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.show();
+        }
+    };
+    private void makeCall() {
+
+        // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением
+        // IDevice inter = new DeviceImpl();
+        // inter.Call("sip:" + mCallAddress + "@" + mSipProfile.getRemoteIp() + ":" + mSipProfile.getRemotePort());
+
+        // так же необходимо переименовать конструктор по умолчанию в классе DeviceImpl на public
+
+        String mCallAddress = InputPlaceFragment.getTextFromTextView();
+        SipProfile mSipProfile = new SipProfile();
+        DeviceImpl.GetInstance().Call(
+                "sip:" + mCallAddress +
+                        "@" + mSipProfile.getRemoteIp() +
+                        ":" + mSipProfile.getRemotePort());
+
+    }
 }

@@ -1,6 +1,9 @@
 package com.example.dev2.faceforapplication.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +16,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
+
+import java.util.ArrayList;
 
 import sipua.IDevice;
 import sipua.SipProfile;
@@ -37,7 +43,8 @@ public class HistoryFragment extends Fragment {
     public static final String TAG ="HistoryFragment";
 
     private ListView listHistory;
-    private ArrayAdapter<String> adapter;
+//    private ArrayAdapter<String> adapter;
+    private MyAdapter adapter;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,14 +62,15 @@ public class HistoryFragment extends Fragment {
     /**
      * The Names.
      */
-    String[] names = {
-            "3001",
-            "3002",
-            "3003",
-            "3004",
-            "3005",
-            "3006"
-    };
+//    String[] names = {
+//            "3001",
+//            "3002",
+//            "3003",
+//            "3004",
+//            "3005",
+//            "3006"
+//    };
+    private ArrayList<String> names;
 
     /**
      * New instance.
@@ -115,11 +123,21 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setRetainInstance(true);
+
+        names = new ArrayList<>();
+        names.add("3001");
+        names.add("3002");
+        names.add("3003");
+        names.add("3004");
+        names.add("3005");
+
+
         historyFragment = View.inflate(getActivity(), R.layout.fragment_history, null);
         listHistory = (ListView) historyFragment.findViewById(R.id.list_history);
         listHistory.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
         listHistory.setOnItemClickListener(listener);
-        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
+        adapter = new MyAdapter(getActivity(), names);
+//        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
         listHistory.setAdapter(adapter);
 
         return historyFragment;
@@ -161,14 +179,32 @@ public class HistoryFragment extends Fragment {
      * The Listener.
      */
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
-            Intent intent = new Intent(getActivity(), CallActivity.class);
-            getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
-            startActivity(intent);
-            makeCall();
-            InputPlaceFragment.setTextInToTextView("");
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Call this contact ?");
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), CallActivity.class);
+                    getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+                    startActivity(intent);
+                    makeCall();
+                    InputPlaceFragment.setTextInToTextView("");
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alert.show();
+
+
+
         }
     };
 
@@ -182,12 +218,43 @@ public class HistoryFragment extends Fragment {
 
         String mCallAddress = InputPlaceFragment.getTextFromTextView();
         SipProfile mSipProfile = new SipProfile();
-        //globalData.setOutCallNumber(mCallAddress);
         DeviceImpl.GetInstance().Call(
                 "sip:" + mCallAddress +
                         "@" + mSipProfile.getRemoteIp() +
                         ":" + mSipProfile.getRemotePort());
 
+    }
+    public class MyAdapter extends ArrayAdapter {
+
+        private Context mContext;
+        private ArrayList<String> mStrings;
+
+        public MyAdapter(Context context, ArrayList<String> strings) {
+            super(context, 0, strings);
+            mContext = context;
+            mStrings = strings;
+        }
+
+        @Override
+        public View getView(final int position, View convertView,
+                            ViewGroup parent) {
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = View.inflate(mContext, R.layout.item_to_list_view, null);
+                holder = new ViewHolder(convertView);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.news.setText(mStrings.get(position));
+            return convertView;
+        }
+        class ViewHolder {
+            TextView news;
+            public ViewHolder(View v){
+                news =(TextView) v.findViewById(R.id.tex_label_in_list);
+            }
+        }
     }
 
 }

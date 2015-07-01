@@ -160,11 +160,11 @@ public class CallButtonsFragment extends Fragment {
                     if (InputPlaceFragment.getTextFromTextView().equals("")) {
                         Toast.makeText(getActivity(), "Input number phone", Toast.LENGTH_SHORT).show();
                     }else {
-                        makeCall();
                         Intent intent = new Intent(getActivity(), CallActivity.class);
                         getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
                         InputPlaceFragment.setTextInToTextView("");
+                        makeCall();
                     }
                     break;
             }

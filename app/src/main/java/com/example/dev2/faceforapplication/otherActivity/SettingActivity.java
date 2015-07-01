@@ -71,6 +71,10 @@ public class SettingActivity extends AppCompatActivity {
             about
     };
 
+    public static String getName;
+    public static String getPassword;
+    public static String getServer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +110,8 @@ public class SettingActivity extends AppCompatActivity {
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SettingActivity.this, editText.getText().toString() , Toast.LENGTH_SHORT).show();
+                    getName = editText.getText().toString();
+                    Toast.makeText(SettingActivity.this,  getName, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -120,7 +125,8 @@ public class SettingActivity extends AppCompatActivity {
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SettingActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
+                    getPassword = editText.getText().toString();
+                    Toast.makeText(SettingActivity.this, getPassword, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -135,7 +141,8 @@ public class SettingActivity extends AppCompatActivity {
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SettingActivity.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
+                    getServer = editText.getText().toString();
+                    Toast.makeText(SettingActivity.this, getServer, Toast.LENGTH_SHORT).show();
                 }
             });
         }
