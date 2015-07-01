@@ -172,16 +172,16 @@ public class CallButtonsFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), CallActivity.class);
                             getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                             startActivity(intent);
-                            InputPlaceFragment.setTextInToTextView("");
                             makeCall();
+                            InputPlaceFragment.setTextInToTextView("");
                         }
                     }
                     if (icon != null && endCall != null) {
                         Intent intent = new Intent(getActivity(), CallActivity.class);
                         getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
-                        InputPlaceFragment.setTextInToTextView("");
                         makeCall();
+                        InputPlaceFragment.setTextInToTextView("");
                     }
                     break;
             }
