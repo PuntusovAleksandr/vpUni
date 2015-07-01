@@ -7,6 +7,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,13 +156,29 @@ public class CallButtonsFragment extends Fragment {
     View.OnClickListener  listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            FragmentManager manager = getFragmentManager();
             switch (v.getId()) {
                 case R.id.imBt_call:
-                    if (InputPlaceFragment.getTextFromTextView().equals("")) {
-                        Toast.makeText(getActivity(), "Input number phone", Toast.LENGTH_SHORT).show();
-                    }else {
+                    Fragment buttFragmentByTag = manager.findFragmentByTag(ButtonsFragment.TAG);
+                    Fragment callButtFragmentByTag = manager.findFragmentByTag(CallButtonsFragment.TAG);
+                    Fragment inputPlaceFragment = manager.findFragmentByTag(InputPlaceFragment.TAG);
+                    Fragment icon = manager.findFragmentByTag(IconFragment.TAG);
+                    Fragment endCall = manager.findFragmentByTag(EndCallFragment.TAG);
+
+                    if (buttFragmentByTag != null && callButtFragmentByTag != null && inputPlaceFragment != null) {
+                        if (InputPlaceFragment.getTextFromTextView().equals("")) {
+                            Toast.makeText(getActivity(), "Input number phone", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(getActivity(), CallActivity.class);
+                            getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+                            startActivity(intent);
+                            InputPlaceFragment.setTextInToTextView("");
+                            makeCall();
+                        }
+                    }
+                    if (icon != null && endCall != null) {
                         Intent intent = new Intent(getActivity(), CallActivity.class);
-                        getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
+                        getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
                         InputPlaceFragment.setTextInToTextView("");
                         makeCall();
