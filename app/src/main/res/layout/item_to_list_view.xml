@@ -12,7 +12,8 @@
         android:layout_marginRight="10px"
         android:layout_marginTop="10px"
         android:layout_marginBottom="10px"
-        android:src="@drawable/ic_contact_picture_180_holo_light">
+
+        android:src="@drawable/icon_contact">
     </ImageView>
 
     <TextView
