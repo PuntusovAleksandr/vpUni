@@ -37,7 +37,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="8">
+                android:layout_weight="5">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -48,14 +48,15 @@
                     android:background="#610f88"
                     android:layout_marginLeft="1dp"
                     android:layout_marginTop="1dp"
-                    android:layout_marginRight="1dp" />
+                    android:layout_marginRight="1dp"
+                    android:textColor="#ffffff" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="8">
+                android:layout_weight="5">
 
                 <ImageButton
                     android:layout_width="match_parent"

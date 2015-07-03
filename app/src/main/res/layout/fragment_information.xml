@@ -5,10 +5,11 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="contact is"
+        android:text="@string/contact_is"
         android:id="@+id/information_text"
         android:gravity="center"
         android:textSize="26dp"
+        android:textColor="#ffffff"
         android:background="@drawable/gradient"/>
 
 </FrameLayout>
