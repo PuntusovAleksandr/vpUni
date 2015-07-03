@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import date_base_book_contact.ServiceParams;
 import date_base_book_contact.d_b_contacts_book.ServiceContactBook;
 import date_base_book_contact.d_b_contacts_book.impl.DateBaseContact;
+import date_base_book_contact.d_b_history.ServiseHistory;
+import date_base_book_contact.d_b_history.impl.DateBaseHistory;
 import date_base_book_contact.entity.ContactBook;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
@@ -225,29 +227,43 @@ public class ContactsFragment extends Fragment implements ServiceParams{
     AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
 
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
+        public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+            final String[] mas = parent.getItemAtPosition(position).toString().split(" ");
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("Call this contact ? ");
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    String phone = mas[0];
+                    InputPlaceFragment.setTextInToTextView(phone);
+                    saveToDBHistory(STATUS_TYPED);
+                    makeCall();
                     Intent intent = new Intent(getActivity(), CallActivity.class);
                     getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                     startActivity(intent);
-                    makeCall();
                     InputPlaceFragment.setTextInToTextView("");
                 }
             });
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    InputPlaceFragment.setTextInToTextView("");
                     dialog.cancel();
                 }
             });
             alert.show();
         }
     };
+
+    private void saveToDBHistory(int status) {
+        ServiseHistory history = new DateBaseHistory(getActivity());
+        ServiceContactBook servCont = new DateBaseContact(getActivity());
+        history.addContactToBase(servCont.getContactHistory(
+                InputPlaceFragment.getTextFromTextView(),
+                status
+        ));
+    }
+
     private void makeCall() {
 
         // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением

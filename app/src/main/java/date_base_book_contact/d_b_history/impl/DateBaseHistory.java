@@ -80,7 +80,13 @@ public class DateBaseHistory implements ServiseHistory, ServiceParams {
 
     @Override
     public void deleteContactFromBook(ContactHistory contactHistory) {
+        deleteContact(contactHistory.getPhoneNumber());
+    }
 
+    @Override
+    public void deleteContact(String phone) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(TABLE_HISTORY, COLUMN_PHONE_NUMBER + " = "+ phone, null);
     }
 
     private class DbHelper extends SQLiteOpenHelper {

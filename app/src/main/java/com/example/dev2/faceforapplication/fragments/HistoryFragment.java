@@ -19,7 +19,9 @@ import android.widget.TextView;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import date_base_book_contact.ServiceParams;
 import date_base_book_contact.d_b_history.ServiseHistory;
@@ -110,11 +112,7 @@ public class HistoryFragment extends Fragment implements ServiceParams{
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         history = new DateBaseHistory(getActivity());
-        names = new ArrayList<>();
-        ArrayList<ContactHistory> contactHistories = history.getAllContactHistory();
-        for (ContactHistory cont : contactHistories) {
-            names.add(cont.getPhoneNumber() + " " + cont.getLastName() + " " + cont.getNikeName());
-        }
+
     }
 
     @Override
@@ -127,11 +125,21 @@ public class HistoryFragment extends Fragment implements ServiceParams{
         listHistory = (ListView) historyFragment.findViewById(R.id.list_history);
         listHistory.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
         listHistory.setOnItemClickListener(listener);
-        adapter = new MyAdapter(getActivity(), names);
-//        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_activated_1, names);
+        listHistory.setOnItemLongClickListener(longListener);
+        adapter = new MyAdapter(getActivity(), getArrayString());
         listHistory.setAdapter(adapter);
 
         return historyFragment;
+    }
+
+    private ArrayList<String> getArrayString() {
+        names = new ArrayList<>();
+        ArrayList<ContactHistory> contactHistories = history.getAllContactHistory();
+        for (ContactHistory cont : contactHistories) {
+            names.add(cont.getDateCall() + " " + cont.getPhoneNumber() + " " + cont.getLastName()
+                    + " " + cont.getNikeName());
+        }
+        return names;
     }
 
     /**
@@ -173,12 +181,15 @@ public class HistoryFragment extends Fragment implements ServiceParams{
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            InputPlaceFragment.setTextInToTextView(parent.getItemAtPosition(position).toString());
+            final String[] mas = parent.getItemAtPosition(position).toString().split(" ");
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("Call this contact ?");
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    String phone = mas[2];
+                    InputPlaceFragment.setTextInToTextView(phone);
+                    saveToHistory(phone, STATUS_TYPED);
                     Intent intent = new Intent(getActivity(), CallActivity.class);
                     getActivity(). overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                     startActivity(intent);
@@ -189,21 +200,61 @@ public class HistoryFragment extends Fragment implements ServiceParams{
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    InputPlaceFragment.setTextInToTextView("");
                     dialog.cancel();
                 }
             });
             alert.show();
+        }
+    };
 
+    private void saveToHistory(String phone, int status) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM HH.mm.ss");
+        history = new DateBaseHistory(getActivity());
+        // TODO: 03.07.15 надо дописать метод получения контакта ContactHistory  из баз History
+        history.addContactToBase(new ContactHistory(
+                dateFormat.format(new Date()),
+                phone, "","","", "", status
+        ));
+    }
 
-
+    AdapterView.OnItemLongClickListener longListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(final AdapterView<?> parent, View view,
+                                       final int position, long id) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Delete this contact ?");
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ServiseHistory history = new DateBaseHistory(getActivity());
+                    String[] phones = parent.getItemAtPosition(position).toString().split(" ");
+                    String phone = phones[2];
+                    history.deleteContact(phone);;
+                    InputPlaceFragment.setTextInToTextView("");
+                    getArrayString();
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    InputPlaceFragment.setTextInToTextView("");
+                    dialog.cancel();
+                }
+            });
+            alert.show();
+            return false;
         }
     };
 
     private void makeCall() {
 
-        // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать этот метод с добавлением
+        // // TODO: 30.06.15 необходимо создать IDevice inter = new DeviceImpl(); и переписать
+        // этот метод с добавлением
         // IDevice inter = new DeviceImpl();
-        // inter.Call("sip:" + mCallAddress + "@" + mSipProfile.getRemoteIp() + ":" + mSipProfile.getRemotePort());
+        // inter.Call("sip:" + mCallAddress + "@" + mSipProfile.getRemoteIp() + ":"
+        // + mSipProfile.getRemotePort());
 
         // так же необходимо переименовать конструктор по умолчанию в классе DeviceImpl на public
 

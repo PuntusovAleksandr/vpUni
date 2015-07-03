@@ -19,4 +19,6 @@ public interface ServiseHistory {
 
     public void deleteContactFromBook(ContactHistory contactHistory);
 
+    public void deleteContact(String phone);
+
 }
