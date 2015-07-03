@@ -9,7 +9,6 @@ import android.gov.nist.javax.sip.clientauthutils.AuthenticationHelper;
 import android.gov.nist.javax.sip.clientauthutils.DigestServerAuthenticationHelper;
 import android.gov.nist.javax.sip.message.SIPMessage;
 import android.javax.sdp.MediaDescription;
-import android.javax.sdp.SdpException;
 import android.javax.sip.ClientTransaction;
 import android.javax.sip.Dialog;
 import android.javax.sip.DialogState;
@@ -60,7 +59,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Timer;
 
 import sipua.ISipEventListener;
 import sipua.ISipManager;
@@ -227,7 +225,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         } else if (response.getStatusCode() == Response.OK) {
             if (cseq.getMethod().equals(Request.INVITE)) {
                 System.out.println("Dialog after 200 OK  " + dialog);
-                try {
+               /* try {
                     Request ackRequest = responseDialog.createAck(cseq
                             .getSeqNumber());
                     System.out.println("Sending ACK");
@@ -244,7 +242,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                             SipEventType.CALL_CONNECTED, "", "", rtpPort));
                 } catch (InvalidArgumentException | SdpException | ParseException | UnsupportedEncodingException | SipException e) {
                     e.printStackTrace();
-                }
+                }*/
 
             } else if (cseq.getMethod().equals(Request.CANCEL)) {
                 if (dialog.getState() == DialogState.CONFIRMED) {
@@ -356,7 +354,6 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
 
 
         if (request.getMethod().equals(Request.ACK)) {
-            soundManager = new SoundManager(mContext, sipProfile.getLocalIp());
             Intent intent = new Intent(mContext, WindowCallingActivity.class);
             mContext.startActivity(intent);
             //processInvite(arg0, serverTransactionId);
@@ -652,6 +649,9 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
             toHeader.setTag("a53e42");
             // Application is supposed to set.
             okResponse.addHeader(contactHeader);
+            ContentTypeHeader contentTypeHeader = this.headerFactory
+                    .createContentTypeHeader("application", "sdp");
+            okResponse.setContent(rawContent, contentTypeHeader);
             st.sendResponse(okResponse);
 
             //new Timer().schedule(new MyTimerTask(this), 1000);
