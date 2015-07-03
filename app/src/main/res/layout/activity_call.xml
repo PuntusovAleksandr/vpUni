@@ -13,8 +13,9 @@
     <LinearLayout
         android:id="@+id/ll_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="3"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_body_other"
@@ -30,7 +31,7 @@
         android:id="@+id/ll_botton_other"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="6"
+        android:layout_weight="3"
         android:orientation="vertical"></LinearLayout>
 
 </LinearLayout>

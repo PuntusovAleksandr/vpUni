@@ -14,11 +14,13 @@ import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.fragments.CallButtonsFragment;
 import com.example.dev2.faceforapplication.fragments.EndCallFragment;
 import com.example.dev2.faceforapplication.fragments.IconFragment;
+import com.example.dev2.faceforapplication.fragments.InformationFragment;
 
 /**
  * The type Window calling activity.
  */
 public class WindowCallingActivity extends AppCompatActivity implements
+        InformationFragment.OnFragmentInteractionListener,
         IconFragment.OnFragmentInteractionListener,
         CallButtonsFragment.OnFragmentInteractionListener,
         EndCallFragment.OnFragmentInteractionListener{
@@ -29,6 +31,7 @@ public class WindowCallingActivity extends AppCompatActivity implements
     private IconFragment iconFragment;
     private CallButtonsFragment callButtonsFragment;
     private EndCallFragment endCallFragment;
+    private InformationFragment informationFragment;
     private Intent intent;
 
     @Override
@@ -40,12 +43,14 @@ public class WindowCallingActivity extends AppCompatActivity implements
         iconFragment = IconFragment.newInstance();
         callButtonsFragment = CallButtonsFragment.newInstance();
         endCallFragment = EndCallFragment.newInstance();
+        informationFragment = InformationFragment.newInstance();
 
         if (savedInstanceState == null) {
             transaction = manager.beginTransaction();
             transaction.add(R.id.ll_body_window_calling, iconFragment, IconFragment.TAG);
             transaction.add(R.id.ll_call_up, callButtonsFragment, CallButtonsFragment.TAG);
             transaction.add(R.id.ll_call_cancel, endCallFragment, EndCallFragment.TAG);
+            transaction.add(R.id.ll_head_window_calling, informationFragment, InformationFragment.TAG);
             transaction.commit();
         }
 

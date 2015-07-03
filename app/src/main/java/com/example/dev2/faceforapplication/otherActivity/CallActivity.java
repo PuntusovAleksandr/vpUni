@@ -13,12 +13,14 @@ import android.view.View;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.fragments.EndCallFragment;
 import com.example.dev2.faceforapplication.fragments.IconFragment;
+import com.example.dev2.faceforapplication.fragments.InformationFragment;
 
 
 /**
  * The type Call activity.
  */
 public class CallActivity extends FragmentActivity  implements
+        InformationFragment.OnFragmentInteractionListener,
         EndCallFragment.OnFragmentInteractionListener,
         IconFragment.OnFragmentInteractionListener{
 
@@ -27,6 +29,7 @@ public class CallActivity extends FragmentActivity  implements
 
     private EndCallFragment endCallFragment;
     private IconFragment iconFragment;
+    private InformationFragment informationFragment;
 
     private Intent intent;
 
@@ -37,13 +40,15 @@ public class CallActivity extends FragmentActivity  implements
 
 
         manager = getSupportFragmentManager();
+        informationFragment = InformationFragment.newInstance();
         endCallFragment = EndCallFragment.newInstance();
         iconFragment = IconFragment.newInstance();
 
         if (savedInstanceState == null) {
         transaction = manager.beginTransaction();
-        transaction.add(R.id.ll_body_other,iconFragment, IconFragment.TAG );
-        transaction.add(R.id.ll_botton_other,endCallFragment, EndCallFragment.TAG );
+            transaction.add(R.id.ll_time, informationFragment, InformationFragment.TAG);
+            transaction.add(R.id.ll_body_other,iconFragment, IconFragment.TAG );
+            transaction.add(R.id.ll_botton_other,endCallFragment, EndCallFragment.TAG );
         transaction.commit();
         }
     }
