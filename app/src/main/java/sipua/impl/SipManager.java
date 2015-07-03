@@ -9,6 +9,7 @@ import android.gov.nist.javax.sip.clientauthutils.AuthenticationHelper;
 import android.gov.nist.javax.sip.clientauthutils.DigestServerAuthenticationHelper;
 import android.gov.nist.javax.sip.message.SIPMessage;
 import android.javax.sdp.MediaDescription;
+import android.javax.sdp.SdpException;
 import android.javax.sip.ClientTransaction;
 import android.javax.sip.Dialog;
 import android.javax.sip.DialogState;
@@ -225,7 +226,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
         } else if (response.getStatusCode() == Response.OK) {
             if (cseq.getMethod().equals(Request.INVITE)) {
                 System.out.println("Dialog after 200 OK  " + dialog);
-               /* try {
+                try {
                     Request ackRequest = responseDialog.createAck(cseq
                             .getSeqNumber());
                     System.out.println("Sending ACK");
@@ -242,7 +243,7 @@ public class SipManager implements SipListener, ISipManager, Serializable, Dialo
                             SipEventType.CALL_CONNECTED, "", "", rtpPort));
                 } catch (InvalidArgumentException | SdpException | ParseException | UnsupportedEncodingException | SipException e) {
                     e.printStackTrace();
-                }*/
+                }
 
             } else if (cseq.getMethod().equals(Request.CANCEL)) {
                 if (dialog.getState() == DialogState.CONFIRMED) {

@@ -48,7 +48,7 @@ public class StartPageFragment extends Fragment {
      *
      * @return the start page fragment
      */
-    public StartPageFragment newInstance() {
+    public static StartPageFragment newInstance() {
         if (fragment == null) {
             fragment = new StartPageFragment();
         }

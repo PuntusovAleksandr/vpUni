@@ -3,21 +3,17 @@ package com.example.dev2.faceforapplication.otherActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.dev2.faceforapplication.R;
-import com.example.dev2.faceforapplication.fragments.ButtonsFragment;
 import com.example.dev2.faceforapplication.fragments.CallButtonsFragment;
 import com.example.dev2.faceforapplication.fragments.EndCallFragment;
 import com.example.dev2.faceforapplication.fragments.IconFragment;
-import com.example.dev2.faceforapplication.fragments.InputPlaceFragment;
 
 /**
  * The type Window calling activity.
@@ -41,9 +37,9 @@ public class WindowCallingActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_window_calling);
 
         manager = getSupportFragmentManager();
-        iconFragment = new IconFragment().newInstance();
-        callButtonsFragment = new CallButtonsFragment().newInstance();
-        endCallFragment = new EndCallFragment().newInstance();
+        iconFragment = IconFragment.newInstance();
+        callButtonsFragment = CallButtonsFragment.newInstance();
+        endCallFragment = EndCallFragment.newInstance();
 
         if (savedInstanceState == null) {
             transaction = manager.beginTransaction();

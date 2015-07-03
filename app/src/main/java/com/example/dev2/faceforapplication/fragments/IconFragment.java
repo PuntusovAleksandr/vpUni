@@ -1,6 +1,5 @@
 package com.example.dev2.faceforapplication.fragments;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,7 +44,7 @@ public class IconFragment extends Fragment {
      *
      * @return the icon fragment
      */
-    public IconFragment newInstance() {
+    public static IconFragment newInstance() {
         if (fragment == null) {
             fragment = new IconFragment();
         }

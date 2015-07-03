@@ -1,6 +1,5 @@
 package com.example.dev2.faceforapplication.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +21,10 @@ import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
 import java.util.ArrayList;
 
+import date_base_book_contact.ServiceParams;
+import date_base_book_contact.d_b_contacts_book.ServiceContactBook;
+import date_base_book_contact.d_b_contacts_book.impl.DateBaseContact;
+import date_base_book_contact.entity.ContactBook;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -33,7 +36,7 @@ import sipua.impl.DeviceImpl;
  * Use the {@link ContactsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ContactsFragment extends Fragment {
+public class ContactsFragment extends Fragment implements ServiceParams{
 
     /**
      * The constant TAG.which is necessary for creating registration fragment
@@ -67,7 +70,9 @@ public class ContactsFragment extends Fragment {
 //            "3006"
 //    };
 
-    ArrayList<String> names;
+    private ArrayList<String> names;
+    private ArrayList<ContactBook> contactBookArrayList;
+    private ServiceContactBook serviceContactBook;
 
 
     /**
@@ -75,7 +80,7 @@ public class ContactsFragment extends Fragment {
      *
      * @return the end call fragment
      */
-    public ContactsFragment newInstance() {
+    public static ContactsFragment newInstance() {
         if (fragment == null) {
             fragment = new ContactsFragment();
         }
@@ -123,18 +128,28 @@ public class ContactsFragment extends Fragment {
         setRetainInstance(true);
 
         names  = new ArrayList<>();
-        names.add("3001");
-        names.add("3002");
-        names.add("3003");
-        names.add("3004");
-        names.add("3005");
+        serviceContactBook = new DateBaseContact(getActivity());
+
+        ArrayList tmp = serviceContactBook.getAllContact();
+        if ( tmp.size() <= 0 ) {
+            serviceContactBook.addContactToBase("3001", "Stas", "Bondar", "Stas","");
+            serviceContactBook.addContactToBase("3002", "Valentin", "Valentin", "Done", "");
+            serviceContactBook.addContactToBase( "3003", "Aleksandr", "Holodov", "", "null");
+            serviceContactBook.addContactToBase("3004", "Aleksandr", "", "Alex", "");
+            serviceContactBook.addContactToBase( "3005", "Aleksandr", "Puntusov", "zloj", "");
+            serviceContactBook.addContactToBase( "3006", "op", "", "", "");
+            serviceContactBook.addContactToBase( "*100", "Secretary", "", "", "");
+        }
+        contactBookArrayList = serviceContactBook.getAllContact();
+        for (ContactBook con : contactBookArrayList) {
+            names.add(con.getPhoneNumber() + " " + con.getName());
+        }
 
         contactsFragment = View.inflate(getActivity(), R.layout.fragment_contacts, null);
         listViewContacts = (ListView) contactsFragment.findViewById(R.id.list_contacts);
         listViewContacts.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listViewContacts.setOnItemClickListener(listener);
         adapter = new MyAdapter(getActivity(), names);
-//        adapter = new ArrayAdapter<String>(getActivity(),R.layout.item_to_list_view, R.id.icon_in_list, names);
         listViewContacts.setAdapter(adapter);
 
         return contactsFragment;
@@ -191,19 +206,12 @@ public class ContactsFragment extends Fragment {
                 convertView = View.inflate(mContext, R.layout.item_to_list_view, null);
                 holder = new ViewHolder(convertView);
                 convertView.setTag(holder);
-
             } else {
-
                 holder = (ViewHolder) convertView.getTag();
-
             }
-
             holder.news.setText(mStrings.get(position));
-
             return convertView;
-
         }
-
 
         class ViewHolder {
             TextView news;
@@ -211,7 +219,6 @@ public class ContactsFragment extends Fragment {
             public ViewHolder(View v){
                 news =(TextView) v.findViewById(R.id.tex_label_in_list);
                 news.setTextColor(0xFFFFFFFF);
-
             }
         }
     }

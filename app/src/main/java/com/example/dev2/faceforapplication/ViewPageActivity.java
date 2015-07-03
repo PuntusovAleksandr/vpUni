@@ -100,9 +100,9 @@ public class ViewPageActivity extends AppCompatActivity implements ActionBar.Tab
          */
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        startPageFragment = new StartPageFragment().newInstance();
-        historyFragment =  new HistoryFragment().newInstance();
-        contactsFragment =new ContactsFragment().newInstance();
+        startPageFragment = StartPageFragment.newInstance();
+        historyFragment =  HistoryFragment.newInstance();
+        contactsFragment =ContactsFragment.newInstance();
 
         listFragments = new ArrayList<>();
         listFragments.add(startPageFragment);

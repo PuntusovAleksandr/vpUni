@@ -1,6 +1,5 @@
 package com.example.dev2.faceforapplication.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,7 +21,10 @@ import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
 import java.util.ArrayList;
 
-import sipua.IDevice;
+import date_base_book_contact.ServiceParams;
+import date_base_book_contact.d_b_history.ServiseHistory;
+import date_base_book_contact.d_b_history.impl.DateBaseHistory;
+import date_base_book_contact.entity.ContactHistory;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -35,7 +36,7 @@ import sipua.impl.DeviceImpl;
  * Use the {@link HistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements ServiceParams{
 
     /**
      * The constant TAG.which is necessary for creating registration fragment
@@ -59,25 +60,17 @@ public class HistoryFragment extends Fragment {
 
     private static HistoryFragment fragment;
     private View historyFragment;
-    /**
-     * The Names.
-     */
-//    String[] names = {
-//            "3001",
-//            "3002",
-//            "3003",
-//            "3004",
-//            "3005",
-//            "3006"
-//    };
+
     private ArrayList<String> names;
+    private ServiseHistory history;
+
 
     /**
      * New instance.
      *
      * @return the end call fragment
      */
-    public HistoryFragment newInstance() {
+    public static HistoryFragment newInstance() {
         if (fragment == null) {
             fragment = new HistoryFragment();
         }
@@ -116,6 +109,12 @@ public class HistoryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        history = new DateBaseHistory(getActivity());
+        names = new ArrayList<>();
+        ArrayList<ContactHistory> contactHistories = history.getAllContactHistory();
+        for (ContactHistory cont : contactHistories) {
+            names.add(cont.getPhoneNumber() + " " + cont.getLastName() + " " + cont.getNikeName());
+        }
     }
 
     @Override
@@ -123,14 +122,6 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setRetainInstance(true);
-
-        names = new ArrayList<>();
-        names.add("3001");
-        names.add("3002");
-        names.add("3003");
-        names.add("3004");
-        names.add("3005");
-
 
         historyFragment = View.inflate(getActivity(), R.layout.fragment_history, null);
         listHistory = (ListView) historyFragment.findViewById(R.id.list_history);

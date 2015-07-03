@@ -14,6 +14,11 @@ import android.widget.Toast;
 import com.example.dev2.faceforapplication.R;
 import com.example.dev2.faceforapplication.otherActivity.CallActivity;
 
+import date_base_book_contact.ServiceParams;
+import date_base_book_contact.d_b_contacts_book.ServiceContactBook;
+import date_base_book_contact.d_b_contacts_book.impl.DateBaseContact;
+import date_base_book_contact.d_b_history.ServiseHistory;
+import date_base_book_contact.d_b_history.impl.DateBaseHistory;
 import sipua.SipProfile;
 import sipua.impl.DeviceImpl;
 
@@ -25,7 +30,7 @@ import sipua.impl.DeviceImpl;
  * Use the {@link CallButtonsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CallButtonsFragment extends Fragment {
+public class CallButtonsFragment extends Fragment implements ServiceParams{
 
     /**
      * The constant TAG.which is necessary for creating registration fragment
@@ -48,6 +53,8 @@ public class CallButtonsFragment extends Fragment {
 
 
     private View callButtonsFragmetnt;
+    private ServiseHistory history;
+    private ServiceContactBook servCont;
 
     //Sip profile settings
     private SipProfile mSipProfile;
@@ -57,7 +64,7 @@ public class CallButtonsFragment extends Fragment {
      *
      * @return the call buttons fragment
      */
-    public CallButtonsFragment newInstance() {
+    public static CallButtonsFragment newInstance() {
         if (fragment == null) {
             fragment = new CallButtonsFragment();
         }
@@ -164,18 +171,20 @@ public class CallButtonsFragment extends Fragment {
                         if (InputPlaceFragment.getTextFromTextView().equals("")) {
                             Toast.makeText(getActivity(), "Input number phone", Toast.LENGTH_SHORT).show();
                         } else {
+                            makeCall();
+                            saveToDB(STATUS_TYPED);
                             Intent intent = new Intent(getActivity(), CallActivity.class);
                             getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                             startActivity(intent);
-                            makeCall();
                             InputPlaceFragment.setTextInToTextView("");
                         }
                     }
                     if (icon != null && endCall != null) {
+                        makeCall();
+                        saveToDB(STATUS_ANSWERED);
                         Intent intent = new Intent(getActivity(), CallActivity.class);
                         getActivity().overridePendingTransition(R.anim.righttoleft, R.anim.stable);
                         startActivity(intent);
-//                        makeCall();
                         getActivity().finish();
                         InputPlaceFragment.setTextInToTextView("");
                     }
@@ -183,6 +192,17 @@ public class CallButtonsFragment extends Fragment {
             }
         }
     };
+
+    private void saveToDB(int status) {
+
+        history = new DateBaseHistory(getActivity());
+        servCont = new DateBaseContact(getActivity());
+        history.addContactToBase(servCont.getContactHistory(
+                InputPlaceFragment.getTextFromTextView(),
+                status
+        ));
+
+    }
 
     private void makeCall() {
 

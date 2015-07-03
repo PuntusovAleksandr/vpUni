@@ -47,7 +47,7 @@ public class EndCallFragment extends Fragment {
      *
      * @return the end call fragment
      */
-    public EndCallFragment newInstance() {
+    public static EndCallFragment newInstance() {
         if (fragment == null) {
             fragment = new EndCallFragment();
         }

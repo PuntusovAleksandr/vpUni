@@ -37,8 +37,8 @@ public class CallActivity extends FragmentActivity  implements
 
 
         manager = getSupportFragmentManager();
-        endCallFragment = new EndCallFragment(); // .newInstance();
-        iconFragment = new IconFragment();  // .newInstance();
+        endCallFragment = EndCallFragment.newInstance();
+        iconFragment = IconFragment.newInstance();
 
         if (savedInstanceState == null) {
         transaction = manager.beginTransaction();
